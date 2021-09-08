@@ -7,6 +7,7 @@ import { SoldesRevenusDepensesModule } from './soldes-revenus-depenses/soldes-re
 import { CathegoriesDepensesModule } from './cathegories-depenses/cathegories-depenses.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConnect from './config/databaseConnect';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import databaseConnect from './config/databaseConnect';
     SoldesRevenusDepensesModule,
     CathegoriesDepensesModule,
     TypeOrmModule.forRoot(databaseConnect),
+    ConfigModule.forRoot(),
   ],
   controllers: [],
   providers: [],

@@ -31,7 +31,6 @@ export class MembersController {
     description: 'not created',
   })
   create(@Body() createMemberDto: CreateMemberDto) {
-    console.log(createMemberDto);
     return this.membersService.create(createMemberDto);
   }
 

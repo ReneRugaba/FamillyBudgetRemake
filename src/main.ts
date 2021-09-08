@@ -7,10 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // create documentation swagger
   const configSwagger = new DocumentBuilder()
-    .setTitle('Familly Budget')
-    .setDescription('familly budget management')
-    .setVersion('1.0.0')
-    .addTag('FamillyBudget')
+    .setTitle(process.env.DOC_TITLE)
+    .setDescription(process.env.DOC_DESCRIPTION)
+    .setVersion(process.env.DOC_VERSION)
+    .addTag(process.env.DOC_TAG)
     .build();
 
   const document = SwaggerModule.createDocument(app, configSwagger);
@@ -24,6 +24,12 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT_APP, async () =>
+    console.log(
+      `application start on port ${
+        process.env.PORT_APP
+      } on url ${await app.getUrl()}`,
+    ),
+  );
 }
 bootstrap();

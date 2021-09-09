@@ -1,29 +1,104 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, UpdateResult, DeleteResult } from 'typeorm';
 import { CreateSoldesRevenusDepenseDto } from './dto/create-soldes-revenus-depense.dto';
 import { UpdateSoldesRevenusDepenseDto } from './dto/update-soldes-revenus-depense.dto';
+import { SoldesRevenusDepense } from './entities/soldes-revenus-depense.entity';
 
 @Injectable()
 export class SoldesRevenusDepensesService {
-  create(createSoldesRevenusDepenseDto: CreateSoldesRevenusDepenseDto) {
-    return 'This action adds a new soldesRevenusDepense';
+  constructor(
+    @InjectRepository(SoldesRevenusDepense)
+    private soldesRevenusDepense: Repository<SoldesRevenusDepense>,
+  ) {}
+
+  async create(
+    createSoldesRevenusDepenseDto: CreateSoldesRevenusDepenseDto,
+  ): Promise<SoldesRevenusDepense> {
+    try {
+      const solde: SoldesRevenusDepense = await this.soldesRevenusDepense.save(
+        createSoldesRevenusDepenseDto,
+      );
+      return solde;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
-  findAll() {
-    return `This action returns all soldesRevenusDepenses`;
+  async findAll(): Promise<SoldesRevenusDepense[]> {
+    try {
+      const soldes: SoldesRevenusDepense[] =
+        await this.soldesRevenusDepense.find();
+      if (soldes.length >= 1) {
+        return soldes;
+      } else {
+        throw new NotFoundException();
+      }
+    } catch (error) {
+      if (error.respnse.satusCode === 404) {
+        throw new NotFoundException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} soldesRevenusDepense`;
+  async findOne(id: number): Promise<SoldesRevenusDepense> {
+    try {
+      const solde: SoldesRevenusDepense =
+        await this.soldesRevenusDepense.findOne(id);
+      if (!solde) {
+        throw new NotFoundException();
+      }
+      return solde;
+    } catch (error) {
+      if (error.response.statusCode === 404) {
+        throw new NotFoundException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 
-  update(
+  async update(
     id: number,
     updateSoldesRevenusDepenseDto: UpdateSoldesRevenusDepenseDto,
-  ) {
-    return `This action updates a #${id} soldesRevenusDepense`;
+  ): Promise<UpdateResult> {
+    try {
+      const affected: UpdateResult = await this.soldesRevenusDepense.update(
+        id,
+        updateSoldesRevenusDepenseDto,
+      );
+      if (affected.affected !== 1) {
+        throw new NotFoundException();
+      }
+      return affected;
+    } catch (error) {
+      if (error.response.statusCode === 404) {
+        throw new NotFoundException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} soldesRevenusDepense`;
+  async remove(id: number) {
+    try {
+      const affected: DeleteResult = await this.soldesRevenusDepense.delete(id);
+      if (affected.affected !== 1) {
+        throw new NotFoundException();
+      }
+      return affected;
+    } catch (error) {
+      if (error.response.statusCode === 404) {
+        throw new NotFoundException();
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 }

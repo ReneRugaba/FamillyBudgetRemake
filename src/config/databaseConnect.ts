@@ -8,7 +8,7 @@ const databaseConnect: ConnectionOptions = {
   password: '',
   database: 'familly_budget',
   entities: ['dist/**/*.entity{.ts,.js}'],
-  migrationsTableName: 'famillyBudget_migrations',
   synchronize: true,
+  dropSchema: true,
 };
 export default databaseConnect;

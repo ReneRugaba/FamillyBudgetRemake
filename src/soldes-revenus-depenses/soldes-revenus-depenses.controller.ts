@@ -85,10 +85,7 @@ export class SoldesRevenusDepensesController {
 
   @Delete(':id')
   @Patch(':id')
-  @ApiOkResponse({
-    description: 'Succefuf request!',
-    type: affectedDeletedData,
-  })
+  @ApiOkResponse({description: 'Succefuf request!', type: affectedDeletedData,})
   @ApiNotFoundResponse({ description: 'Not found response!' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error!' })
   remove(@Param('id') id: string) {

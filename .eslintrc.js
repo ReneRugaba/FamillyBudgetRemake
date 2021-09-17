@@ -21,4 +21,8 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
   },
+  extends: ["next", "next/core-web-vitals"],
+  "rules": {
+    "prefer-const": "error"
+  }
 };

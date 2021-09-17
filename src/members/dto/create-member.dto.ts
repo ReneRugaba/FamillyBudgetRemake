@@ -24,7 +24,7 @@ export class CreateMemberDto {
   @ApiProperty()
   email: string;
 
-  @IsString()
+  
   @Length(8)
   @Matches('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})')
   @IsNotEmpty()

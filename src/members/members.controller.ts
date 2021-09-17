@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { CreateMemberDto } from './dto/create-member.dto';
@@ -16,14 +18,26 @@ import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Member } from './entities/member.entity';
 import { UpdateResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from './local-auth.guard';
+import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('members')
 @ApiTags('Members')
 export class MembersController {
-  constructor(private readonly membersService: MembersService) {}
+  constructor(private readonly membersService: MembersService, private authService:AuthService) {}
+
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
+  async login(@Body() user: LoginDto) {
+    return this.authService.login(user);
+  }
 
   @Post()
   @ApiCreatedResponse({ description: 'created', type: Member })
@@ -35,6 +49,8 @@ export class MembersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Response ok', type: [Member] })
   @ApiNotFoundResponse({ description: 'no datas found!' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error!' })
@@ -43,6 +59,8 @@ export class MembersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'response OK!', type: Member })
   @ApiNotFoundResponse({ description: 'Not found Response!' })
   @ApiInternalServerErrorResponse({ description: 'Interna server error!' })
@@ -51,12 +69,16 @@ export class MembersController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Data Updated!', type: UpdateResult })
   update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
     return this.membersService.update(+id, updateMemberDto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.membersService.remove(+id);
   }

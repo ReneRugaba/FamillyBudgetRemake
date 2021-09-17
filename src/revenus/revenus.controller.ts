@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { RevenusService } from './revenus.service';
 import { CreateRevenuDto } from './dto/create-revenu.dto';
@@ -16,10 +17,12 @@ import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Revenu } from './entities/revenu.entity';
 import { affectedUpdateData } from '../config/affectedUpdateData.dto';
 import { affectedDeletedData } from './../config/affectedDeletedData.dto';
+import { JwtAuthGuard } from '../members/jwt-auth.guard';
 
 @Controller('revenus')
 @ApiTags('REVENUS')
@@ -27,6 +30,8 @@ export class RevenusController {
   constructor(private readonly revenusService: RevenusService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'Created response', type: Revenu })
   @ApiInternalServerErrorResponse({ description: 'Internal server error!' })
   create(@Body() createRevenuDto: CreateRevenuDto) {
@@ -34,6 +39,8 @@ export class RevenusController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Datas found!', type: [Revenu] })
   @ApiNotFoundResponse({ description: 'Not found response!' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error!' })
@@ -42,6 +49,8 @@ export class RevenusController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Datas found!', type: Revenu })
   @ApiNotFoundResponse({ description: 'Not found response!' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error!' })
@@ -50,6 +59,8 @@ export class RevenusController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Data updated!',
     type: affectedUpdateData,
@@ -61,6 +72,8 @@ export class RevenusController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Data updated!',
     type: affectedDeletedData,

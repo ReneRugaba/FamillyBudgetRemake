@@ -6,13 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TypesRevenusService } from './types-revenus.service';
 import { CreateTypesRevenuDto } from './dto/create-types-revenu.dto';
 import { UpdateTypesRevenuDto } from './dto/update-types-revenu.dto';
-import { ApiCreatedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
 import { affectedUpdateData } from '../config/affectedUpdateData.dto';
 import { affectedDeletedData } from '../config/affectedDeletedData.dto';
+import { JwtAuthGuard } from '../members/jwt-auth.guard';
 
 @Controller('types-revenus')
 @ApiTags("TYPES-REVENUS")
@@ -20,6 +22,8 @@ export class TypesRevenusController {
   constructor(private readonly typesRevenusService: TypesRevenusService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({description: "Created response", type: CreateTypesRevenuDto})
   @ApiInternalServerErrorResponse({description: "Internal server response"})
   create(@Body() createTypesRevenuDto: CreateTypesRevenuDto) {
@@ -27,6 +31,8 @@ export class TypesRevenusController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({description: "Created response", type: [CreateTypesRevenuDto]})
   @ApiNotFoundResponse({description: "Not found response"})
   @ApiInternalServerErrorResponse({description: "Internal server response"})
@@ -35,6 +41,8 @@ export class TypesRevenusController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({description: "Created response", type: CreateTypesRevenuDto})
   @ApiNotFoundResponse({description: "Not found response"})
   @ApiInternalServerErrorResponse({description: "Internal server response"})
@@ -43,6 +51,8 @@ export class TypesRevenusController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({description: "Created response", type: affectedUpdateData})
   @ApiNotFoundResponse({description: "Not found response"})
   @ApiInternalServerErrorResponse({description: "Internal server response"})
@@ -54,6 +64,8 @@ export class TypesRevenusController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({description: "Created response", type: affectedDeletedData})
   @ApiNotFoundResponse({description: "Not found response"})
   @ApiInternalServerErrorResponse({description: "Internal server response"})

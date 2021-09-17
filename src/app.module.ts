@@ -8,6 +8,8 @@ import { CathegoriesDepensesModule } from './cathegories-depenses/cathegories-de
 import { TypeOrmModule } from '@nestjs/typeorm';
 import databaseConnect from './config/databaseConnect';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './members/jwtConstants';
 
 @Module({
   imports: [

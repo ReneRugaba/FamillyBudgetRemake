@@ -8,6 +8,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { Member } from './entities/member.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class MembersService {
@@ -17,17 +18,39 @@ export class MembersService {
   ) {}
 
   async create(createMemberDto: CreateMemberDto): Promise<Member> {
+    const passWordHash: string = await bcrypt.hash(createMemberDto.password,10)
+    createMemberDto = {
+      ...createMemberDto,
+      password: passWordHash,
+    }
     try {
       const member = await this.memberRepository.save(createMemberDto);
-      return member;
+      return {...member, password:undefined};
     } catch (error) {
       throw new InternalServerErrorException();
+    }
+  }
+
+  async findOneMember(username: string): Promise<Member> {
+    try {
+      const member: Member = await this.memberRepository.findOne({email:username})
+      if (!member) {
+        throw new NotFoundException();
+      }
+      return member;
+    } catch (error) {
+      if (error.response.statusCode===404) {
+        throw new NotFoundException();
+      } else {
+        throw new InternalServerErrorException();
+      }
     }
   }
 
   async findAll(): Promise<Member[]> {
     try {
       const members = await this.memberRepository.find();
+      members.map((member)=>(member.password=undefined));
       if (members.length <= 0) {
         throw new NotFoundException();
       }

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { DepensesService } from './depenses.service';
 import { CreateDepenseDto } from './dto/create-depense.dto';
@@ -16,10 +17,12 @@ import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Depense } from './entities/depense.entity';
 import { affectedUpdateData } from './../config/affectedUpdateData.dto';
 import { affectedDeletedData } from './../config/affectedDeletedData.dto';
+import { JwtAuthGuard } from '../members/jwt-auth.guard';
 
 @Controller('depenses')
 @ApiTags('DEPENSES')
@@ -27,6 +30,8 @@ export class DepensesController {
   constructor(private readonly depensesService: DepensesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'Created response!', type: Depense })
   @ApiInternalServerErrorResponse({ description: 'Internal server response!' })
   create(@Body() createDepenseDto: CreateDepenseDto) {
@@ -34,6 +39,8 @@ export class DepensesController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Succeful request!', type: [Depense] })
   @ApiNotFoundResponse({ description: 'Not found response!' })
   @ApiInternalServerErrorResponse({ description: 'Internal server response!' })
@@ -42,6 +49,8 @@ export class DepensesController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Succeful request!', type: Depense })
   @ApiNotFoundResponse({ description: 'Not found response!' })
   @ApiInternalServerErrorResponse({ description: 'Internal server response!' })
@@ -50,6 +59,8 @@ export class DepensesController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ description: 'Succeful request!', type: affectedUpdateData })
   @ApiNotFoundResponse({ description: 'Not found response!' })
   @ApiInternalServerErrorResponse({ description: 'Internal server response!' })
@@ -58,6 +69,8 @@ export class DepensesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     description: 'Succeful request!',
     type: affectedDeletedData,

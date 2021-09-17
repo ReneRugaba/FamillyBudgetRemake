@@ -6,7 +6,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Member } from './../../members/entities/member.entity';
-@Entity('SoldesRevenusDepenses')
+@Entity('Soldes-revenus-depenses')
 export class SoldesRevenusDepense {
   @PrimaryGeneratedColumn()
   id: number;

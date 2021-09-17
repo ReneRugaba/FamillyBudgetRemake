@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CathegoriesDepensesService } from './cathegories-depenses.service';
 import { CreateCathegoriesDepenseDto } from './dto/create-cathegories-depense.dto';
 import { UpdateCathegoriesDepenseDto } from './dto/update-cathegories-depense.dto';
 
 @Controller('cathegories-depenses')
+@ApiTags("CATHEGORIES-DEPENSES")
 export class CathegoriesDepensesController {
   constructor(
     private readonly cathegoriesDepensesService: CathegoriesDepensesService,

@@ -8,11 +8,15 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import { CathegoriesDepensesService } from './cathegories-depenses.service';
 import { CreateCathegoriesDepenseDto } from './dto/create-cathegories-depense.dto';
 import { UpdateCathegoriesDepenseDto } from './dto/update-cathegories-depense.dto';
 import { JwtAuthGuard } from '../members/jwt-auth.guard';
+import { CathegoriesDepense } from './entities/cathegories-depense.entity';
+import { UpdateResult, DeleteResult } from 'typeorm';
+import { affectedUpdateData } from './../config/affectedUpdateData.dto';
+import { affectedDeletedData } from '../config/affectedDeletedData.dto';
 
 @Controller('cathegories-depenses')
 @UseGuards(JwtAuthGuard)
@@ -25,6 +29,8 @@ export class CathegoriesDepensesController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiCreatedResponse({description: 'Created response!', type: CathegoriesDepense })
+  @ApiInternalServerErrorResponse({description: 'Internal server error response!'})
   @ApiBearerAuth()
   create(@Body() createCathegoriesDepenseDto: CreateCathegoriesDepenseDto) {
     return this.cathegoriesDepensesService.create(createCathegoriesDepenseDto);
@@ -33,6 +39,9 @@ export class CathegoriesDepensesController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiCreatedResponse({description: 'Created response!', type: [CathegoriesDepense] })
+  @ApiInternalServerErrorResponse({description: 'Internal server error response!'})
+  @ApiNotFoundResponse({description: 'Not found response!'})
   findAll() {
     return this.cathegoriesDepensesService.findAll();
   }
@@ -40,6 +49,9 @@ export class CathegoriesDepensesController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiCreatedResponse({description: 'Created response!', type: CathegoriesDepense })
+  @ApiInternalServerErrorResponse({description: 'Internal server error response!'})
+  @ApiNotFoundResponse({description: 'Not found response!'})
   findOne(@Param('id') id: string) {
     return this.cathegoriesDepensesService.findOne(+id);
   }
@@ -47,6 +59,9 @@ export class CathegoriesDepensesController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiCreatedResponse({description: 'Created response!', type: affectedUpdateData })
+  @ApiInternalServerErrorResponse({description: 'Internal server error response!'})
+  @ApiNotFoundResponse({description: 'Not found response!'})
   update(
     @Param('id') id: string,
     @Body() updateCathegoriesDepenseDto: UpdateCathegoriesDepenseDto,
@@ -60,6 +75,9 @@ export class CathegoriesDepensesController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiCreatedResponse({description: 'Created response!', type: affectedDeletedData  })
+  @ApiInternalServerErrorResponse({description: 'Internal server error response!'})
+  @ApiNotFoundResponse({description: 'Not found response!'})
   remove(@Param('id') id: string) {
     return this.cathegoriesDepensesService.remove(+id);
   }

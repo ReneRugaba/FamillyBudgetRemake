@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,9 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('api', app, document);
+
+  app.use(helmet());
+
   //use global pipe
   app.useGlobalPipes(
     new ValidationPipe({
@@ -24,6 +28,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  
+  app.enableCors();
+  
 
   await app.listen(process.env.PORT_APP, async () =>
     console.log(

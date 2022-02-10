@@ -39,6 +39,13 @@ export class MembersController {
     return this.authService.login(user);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('/profile')
+  getProfile(@Request() req) {
+    return req.user;
+  }
+
   @Post()
   @ApiCreatedResponse({ description: 'created', type: Member })
   @ApiInternalServerErrorResponse({

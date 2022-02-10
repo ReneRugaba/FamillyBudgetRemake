@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MembersModule } from './members/Members.module';
+import { MembersModule } from './members/members.module';
 import { RevenusModule } from './revenus/revenus.module';
 import { DepensesModule } from './depenses/depenses.module';
 import { TypesRevenusModule } from './types-revenus/types-revenus.module';
@@ -11,6 +11,8 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './members/jwtConstants';
 
+
+
 @Module({
   imports: [
     MembersModule,
@@ -19,10 +21,20 @@ import { jwtConstants } from './members/jwtConstants';
     TypesRevenusModule,
     SoldesRevenusDepensesModule,
     CathegoriesDepensesModule,
-    TypeOrmModule.forRoot(databaseConnect),
     ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: "postgres",
+      host: process.env.HOST_DB,
+      port: Number(process.env.PORT_AP),
+      username: process.env.USER_DB,
+      password: process.env.PASSWORD_APP,
+      database: process.env.DB_NAME,
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      synchronize: true,
+      dropSchema: true,
+    }),
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Depense } from 'src/depenses/entities/depense.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity("cathegories-depenses")
 export class CathegoriesDepense {
@@ -7,4 +8,7 @@ export class CathegoriesDepense {
 
   @Column()
   nom: string;
+
+  @OneToMany(()=>Depense,(depense)=>depense.cathegorieDepense)
+  depenses:Depense;
 }

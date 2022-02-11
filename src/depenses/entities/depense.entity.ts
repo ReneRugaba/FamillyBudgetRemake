@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CathegoriesDepense } from 'src/cathegories-depenses/entities/cathegories-depense.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Member } from './../../members/entities/member.entity';
 
 @Entity('Depenses')
@@ -17,4 +18,7 @@ export class Depense {
 
   @ManyToOne(() => Member, (member) => member.depenses)
   member: Member;
+
+  @ManyToOne(()=> CathegoriesDepense,(cathegorieDepense)=>cathegorieDepense.depenses)
+  cathegorieDepense:CathegoriesDepense
 }

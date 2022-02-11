@@ -27,6 +27,8 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
+import { GetUserDTO } from './dto/getUserDTO';
+
 
 @Controller('members')
 @ApiTags('Members')
@@ -40,10 +42,17 @@ export class MembersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get()
   @ApiBearerAuth()
   @Get('/profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Post("/getconnect-user")
+  @ApiBearerAuth()
+  getMemberByUsename(@Body() user:GetUserDTO){
+    return this.membersService.findOneMember(user.username)
   }
 
   @Post()

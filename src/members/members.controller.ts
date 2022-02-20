@@ -27,7 +27,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
-import { GetUserDTO } from './dto/getUserDTO';
+import { GetUserDTO } from './dto/getUser.dto';
 
 
 @Controller('members')
@@ -50,8 +50,9 @@ export class MembersController {
 
   @Post("/getconnect-user")
   @ApiBearerAuth()
-  getMemberByUsename(@Body() user:GetUserDTO){
-    return this.membersService.findOneMember(user.username)
+  async getMemberByUsename(@Body() user:GetUserDTO){
+    const {password,...member}= await this.membersService.findOneMember(user.username)
+    return member;
   }
 
   @Post()

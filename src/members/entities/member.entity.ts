@@ -28,12 +28,12 @@ export class Member {
   @Column()
   password: string;
 
-  @OneToMany(() => Depense, (depense) => depense.member)
-  depenses: Depense;
+  @OneToMany(() => Depense, (depense) => depense.member,{cascade:true})
+  depenses: Depense[];
 
-  @OneToMany(() => Revenu, (revenu) => revenu.member)
-  revenu: Revenu;
+  @OneToMany(() => Revenu, (revenu) => revenu.member,{cascade:true})
+  revenu: Revenu[];
 
-  @OneToMany(() => SoldesRevenusDepense, (solde) => solde.member)
-  soldesReveusDepenses: SoldesRevenusDepense;
+  @OneToMany(() => SoldesRevenusDepense, (solde) => solde.member,{cascade:true})
+  soldesReveusDepenses: SoldesRevenusDepense[];
 }

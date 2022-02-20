@@ -42,7 +42,6 @@ export class MembersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
   @ApiBearerAuth()
   @Get('/profile')
   getProfile(@Request() req) {

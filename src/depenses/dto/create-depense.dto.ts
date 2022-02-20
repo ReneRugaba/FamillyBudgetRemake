@@ -9,4 +9,10 @@ export class CreateDepenseDto {
 
   @IsString()
   beneficiaire: string;
+
+  @IsNumber()
+  memberId:number
+
+  @IsNumber()
+  cathegoryId:number
 }

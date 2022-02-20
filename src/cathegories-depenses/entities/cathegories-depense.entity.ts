@@ -9,6 +9,6 @@ export class CathegoriesDepense {
   @Column()
   nom: string;
 
-  @OneToMany(()=>Depense,(depense)=>depense.cathegorieDepense)
-  depenses:Depense;
+  @OneToMany(()=>Depense,(depense)=>depense.cathegorieDepense,{cascade:true})
+  depenses:Depense[];
 }

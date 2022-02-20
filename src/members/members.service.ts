@@ -37,7 +37,8 @@ export class MembersService {
       if (!member) {
         throw new NotFoundException();
       }
-      return member;
+     
+        return member;
     } catch (error) {
       if (error.response.statusCode===404) {
         throw new NotFoundException();

@@ -10,6 +10,7 @@ import databaseConnect from './config/databaseConnect';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './members/jwtConstants';
+import { HomeModule } from './home/home.module';
 
 
 
@@ -33,6 +34,7 @@ import { jwtConstants } from './members/jwtConstants';
       synchronize: true,
       dropSchema: true,
     }),
+    HomeModule,
   ],
   controllers: [],
   providers: [],

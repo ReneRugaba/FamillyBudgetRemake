@@ -1,6 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,69 +10,84 @@ import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { Member } from './entities/member.entity';
 import * as bcrypt from 'bcrypt';
+import { LoggerMessage } from 'src/utility/logerMessage';
+
 
 @Injectable()
 export class MembersService {
+  private readonly logger = new Logger(MembersService.name)
+  private readonly loggerMessage = new LoggerMessage()
   constructor(
     @InjectRepository(Member)
     private memberRepository: Repository<Member>,
-  ) {}
+  ) { }
 
   async create(createMemberDto: CreateMemberDto): Promise<Member> {
-    const passWordHash: string = await bcrypt.hash(createMemberDto.password,10)
+    this.logger.log(this.loggerMessage.createObjectMessage("Member"))
+    const passWordHash: string = await bcrypt.hash(createMemberDto.password, 10)
     createMemberDto = {
       ...createMemberDto,
       password: passWordHash,
     }
     try {
       const member = await this.memberRepository.save(createMemberDto);
-      return {...member, password:undefined};
+      this.logger.log(this.loggerMessage.successCreateMessage("Member"))
+      return { ...member, password: undefined };
     } catch (error) {
+      this.logger.error(this.loggerMessage.logerErrorMessage("#create()", error.message))
       throw new InternalServerErrorException();
     }
   }
 
   async findOneMember(username: string): Promise<Member> {
+    this.logger.log(this.loggerMessage.searchObjectMessage("Member", "#findOneMember()"))
     try {
-      const member: Member = await this.memberRepository.findOne({email:username})
+      const member: Member = await this.memberRepository.findOne({ email: username })
+      this.logger.log(this.loggerMessage.objectfoundMessage("Member", "#findOneMember()"))
       if (!member) {
+        this.logger.error(this.loggerMessage.logerErrorMessage("#findOneMember()", "Member not exist"))
         throw new NotFoundException();
       }
-     
-        return member;
+
+      return member;
     } catch (error) {
-      if (error.response.statusCode===404) {
-        throw new NotFoundException();
-      } else {
-        throw new InternalServerErrorException();
-      }
+      this.logger.error(this.loggerMessage.logerErrorMessage("#findOneMember()", error.message))
+      throw new InternalServerErrorException();
+
     }
   }
 
   async findAll(): Promise<Member[]> {
+    this.logger.log(this.loggerMessage.searchObjectMessage("All Member", "#findAll()"))
     try {
       const members = await this.memberRepository.find();
-      members.map((member)=>(member.password=undefined));
       if (members.length <= 0) {
         throw new NotFoundException();
       }
+      members.map((member) => (member.password = undefined));
+      this.logger.log(this.loggerMessage.objectfoundMessage("All Member", "#findAll()"))
       return members;
     } catch (error) {
+      this.logger.error(this.loggerMessage.logerErrorMessage("#findAll()", error.message))
       throw new InternalServerErrorException();
     }
   }
 
   async findOne(id: number): Promise<UpdateMemberDto> {
+    this.logger.log(this.loggerMessage.searchObjectMessage("Member", "#findOne()"))
     try {
       const member: Member = await this.memberRepository.findOne(id);
       if (member) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...restMember } = member;
+        this.logger.log(this.loggerMessage.objectfoundMessage("Member", "#findOne()"))
         return restMember;
       } else {
+        this.logger.error(this.loggerMessage.objectNotFound("Member","#findone()"))
         throw new NotFoundException();
       }
     } catch (error) {
+      this.logger.error(this.loggerMessage.logerErrorMessage("#findAll()", error.message))
       throw new InternalServerErrorException();
     }
   }

@@ -1,8 +1,8 @@
 {
   "name": "familly-budget",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Family budget management application",
+  "author": "RUGABA RENE JEAN",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

@@ -6,11 +6,9 @@ import { TypesRevenusModule } from './types-revenus/types-revenus.module';
 import { SoldesRevenusDepensesModule } from './soldes-revenus-depenses/soldes-revenus-depenses.module';
 import { CathegoriesDepensesModule } from './cathegories-depenses/cathegories-depenses.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import databaseConnect from './config/databaseConnect';
 import { ConfigModule } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './members/jwtConstants';
 import { HomeModule } from './home/home.module';
+import OrmConfig from 'ormconfig';
 
 
 
@@ -23,17 +21,7 @@ import { HomeModule } from './home/home.module';
     SoldesRevenusDepensesModule,
     CathegoriesDepensesModule,
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: process.env.HOST_DB,
-      port: Number(process.env.PORT_AP),
-      username: process.env.USER_DB,
-      password: process.env.PASSWORD_APP,
-      database: process.env.DB_NAME,
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      dropSchema: true,
-    }),
+    TypeOrmModule.forRoot(OrmConfig),
     HomeModule,
   ],
   controllers: [],

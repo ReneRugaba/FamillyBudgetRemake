@@ -15,5 +15,8 @@ export class LoggerMessage {
     objectfoundMessage=(searchObject:string, method:string)=>`Found ${searchObject} in method ${method} with success`
 
     objectNotFound=(searchObject:string, method:string)=>`Not found ${searchObject} in method ${method}`
+
+    updateObjectMessage=(method:string,objectUdate:string)=>`Successeful update ${objectUdate} in method ${method}`
+
 }
 

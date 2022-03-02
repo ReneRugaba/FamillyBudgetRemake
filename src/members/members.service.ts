@@ -16,6 +16,7 @@ import { LoggerMessage } from 'src/utility/logerMessage';
 @Injectable()
 export class MembersService {
   private readonly logger = new Logger(MembersService.name)
+  
   private readonly loggerMessage = new LoggerMessage()
   constructor(
     @InjectRepository(Member)
@@ -96,17 +97,20 @@ export class MembersService {
     id: number,
     updateMemberDto: UpdateMemberDto,
   ): Promise<UpdateResult> {
+    this.logger.log(this.loggerMessage.searchObjectMessage("Member", "#update()"))
     try {
       const affected: UpdateResult = await this.memberRepository.update(
         id,
         updateMemberDto,
       );
       if (affected.affected === 1) {
+        this.logger.log(this.loggerMessage.updateObjectMessage("#update()","Member"))
         return affected;
       } else {
         throw new NotFoundException();
       }
     } catch (error) {
+      this.logger.error(this.loggerMessage.logerErrorMessage("#create()", error.message))
       throw new InternalServerErrorException();
     }
   }

@@ -8,7 +8,7 @@ import { CathegoriesDepensesModule } from './cathegories-depenses/cathegories-de
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { HomeModule } from './home/home.module';
-import OrmConfig from 'ormconfig';
+
 
 
 
@@ -21,7 +21,7 @@ import OrmConfig from 'ormconfig';
     SoldesRevenusDepensesModule,
     CathegoriesDepensesModule,
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(OrmConfig),
+    TypeOrmModule.forRoot(),
     HomeModule,
   ],
   controllers: [],
